@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "LSReports",
+    "description": "Compare Grant Reports on Legal Server and Excel.",
+    "version": "1.0",
+    "action": {
+      "default_popup": "index.html",
+      "default_width": 400,
+      "default_height": 600
+    }
+  }
+  
