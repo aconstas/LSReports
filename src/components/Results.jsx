@@ -1,11 +1,13 @@
 import Box from "@mui/material/Box";
-import { Chip } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useState } from "react";
+import LinkComponent from "./Link";
 
-export default function Results() {
-  const missingCases = ["123", "456", "789"];
+export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
+  console.log(ExcelAndLSCaseIDs);
+  const { missingExcelValues, missingLSValues } = ExcelAndLSCaseIDs;
   const [alert, setAlert] = useState(false);
 
   const handleCopy = async (caseID) => {
@@ -14,20 +16,14 @@ export default function Results() {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, 1000);
+      }, 900);
     } catch (err) {
       console.error(err);
     }
   };
 
-  //   const navigateToCase = (event) => {
-  //     event.preventDefault(); // Stop the default navigation
-
-  //     window.open(event.target.href, );
-  //   };
-
   return (
-    <div>
+    <div style={{textAlign: 'center'}}>
       {alert && (
         <Box
           display="flex"
@@ -36,23 +32,77 @@ export default function Results() {
           zIndex={10}
           position={"fixed"}
         >
-          <Alert
-            icon={false}
-            severity="success"
-            // sx={{ zIndex: 10, position: "fixed" }}
-          >
+          <Alert icon={false} severity="success">
             Copied to Clipboard
           </Alert>
         </Box>
       )}
-      {missingCases.map((caseID) => (
-        <Box display="flex" justifyItems="center">
-          <Chip label={caseID} onClick={() => handleCopy(caseID)} />
-          <a href="https://www.wikipedia.org/" target="_blank">
-            <OpenInNewIcon />
-          </a>
-        </Box>
-      ))}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 0.5,
+        }}
+      >
+        {missingExcelValues && (
+          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+            Missing in Excel
+          </Typography>
+        )}
+        {missingExcelValues?.map((caseID) => (
+          <div
+            key={caseID}
+            style={{ display: "flex", alignItems: "center", gap: 2 }}
+          >
+            <Chip
+              label={caseID}
+              onClick={() => handleCopy(caseID)}
+              key={caseID}
+            />
+            <LinkComponent caseID={caseID} />
+          </div>
+        ))}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 0.5,
+        }}
+      >
+        {missingLSValues && (
+          <Typography variant="h6" sx={{ my: 2, textAlign: "center" }}>
+            Missing in LS
+          </Typography>
+        )}
+        {missingLSValues?.map((caseID) => (
+          <div
+            key={caseID}
+            style={{ display: "flex", alignItems: "center", gap: 2 }}
+          >
+            <Chip
+              label={caseID}
+              onClick={() => handleCopy(caseID)}
+              key={caseID}
+            />
+          </div>
+        ))}
+      </Box>
+      <Button
+        variant="contained"
+        size="medium"
+        color="success"
+        onClick={() => setShowResults(false)}
+        sx={{mt: 3, mb: 3}}
+      >
+        Done
+      </Button>
     </div>
   );
 }
+
+// aaaj.legalserver.org/report/{last 6 digits of CaseID}
