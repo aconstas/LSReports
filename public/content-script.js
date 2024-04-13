@@ -1,6 +1,5 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "extractData") {
-        console.log("Received message:", message);
         let combinedData = [];
 
         try {
@@ -16,42 +15,40 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
             const comparisonResult = compareExtractedAndExcel(combinedData, message.excelText)
 
-            // Send the combined data back as the response
-            console.log(comparisonResult);
             sendResponse({ success: true, data: comparisonResult });
         } catch (error) {
             console.error("Error processing data:", error);
-            // Send an error response back
             sendResponse({ success: false, error: error.toString() });
         }
     }
     return true;
 });
 
-
-function extractTableDataByName(tableName) {
-    const allTds = document.querySelectorAll('td');
-    let filteredCaseIDs = [];
-    allTds.forEach(td => {
-        if (tableName === td.textContent.trim()) {
-            console.log("MATCH FOUND: " + td.textContent.trim() + "AND: " + tableName);
-            const tbody = td.closest('tbody');
-            const rows = tbody.querySelectorAll('tr:not(:first-child)');
-            const caseRows = Array.from(rows).filter((row) => row.classList.contains('tableroweven') || row.classList.contains('tablerowodd'));
-            // Extract data from each row
-            const tableData = Array.from(caseRows).flatMap(row => {
-                const reportLinkNodeList = row.querySelectorAll('.report_link');
-                const caseIDs = Array.from(reportLinkNodeList).map(report =>
-                    report.innerText
-                );
-                return caseIDs;
-            });
-            filteredCaseIDs = tableData.filter(str => str.match(/^\d{2}-\d{7}$/));
+function extractTableDataByName(grantName) {
+    const grantData = [];
+    const grantNameElements = document.querySelectorAll('td[style*="margin-left: 30px;"]');
+    for (const elem of grantNameElements) {
+      if (elem.textContent.trim() === grantName) {
+        let row = elem.closest('tr').nextElementSibling;
+        
+        while (row) {
+          if (row.classList.contains("tableroweven") || row.classList.contains("tablerowodd")) {
+            const caseIdLink = row.querySelector('td > a.report_link');
+            const caseId = caseIdLink ? caseIdLink.textContent.trim() : null;
+            if (caseId && caseId.match(/^\d{2}-\d{7}$/)) {
+              grantData.push(caseId);
+            }
+          } else {
+            break;
+          }
+          row = row.nextElementSibling;
         }
-    });
-    return filteredCaseIDs;
-}
-
+        break;
+      }
+    }
+    return grantData;
+  }
+  
 function compareExtractedAndExcel(extracted, excel) {
     let missingExcelValues = [];
     let missingLSValues = [];
