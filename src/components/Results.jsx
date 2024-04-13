@@ -1,7 +1,7 @@
+import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { Button, Chip, Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useState } from "react";
 import LinkComponent from "./Link";
 
@@ -23,7 +23,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
   };
 
   return (
-    <div style={{textAlign: 'center'}}>
+    <div style={{ textAlign: "center" }}>
       {alert && (
         <Box
           display="flex"
@@ -48,7 +48,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
       >
         {missingExcelValues && (
           <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
-            Missing in Excel
+            Missing in Excel ({missingExcelValues.length})
           </Typography>
         )}
         {missingExcelValues?.map((caseID) => (
@@ -76,7 +76,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
       >
         {missingLSValues && (
           <Typography variant="h6" sx={{ my: 2, textAlign: "center" }}>
-            Missing in LS
+            Missing in LS ({missingLSValues.length})
           </Typography>
         )}
         {missingLSValues?.map((caseID) => (
@@ -97,7 +97,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
         size="medium"
         color="success"
         onClick={() => setShowResults(false)}
-        sx={{mt: 3, mb: 3}}
+        sx={{ mt: 3, mb: 3 }}
       >
         Done
       </Button>
@@ -105,4 +105,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
   );
 }
 
-// aaaj.legalserver.org/report/{last 6 digits of CaseID}
+Results.propTypes = {
+  ExcelAndLSCaseIDs: PropTypes.object,
+  setShowResults: PropTypes.func,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import ExcelInput from "./ExcelInput";
 import CompareButton from "./CompareButton";
@@ -54,4 +55,9 @@ export default function Form({ setShowResults, setResultsData }) {
       <CompareButton />
     </form>
   );
+}
+
+Form.propTypes = {
+  setShowResults: PropTypes.func,
+  setResultsData: PropTypes.func,
 }
