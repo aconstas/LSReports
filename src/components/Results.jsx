@@ -47,7 +47,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
         }}
       >
         {missingExcelValues && (
-          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+          <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
             Missing in Excel ({missingExcelValues.length})
           </Typography>
         )}
@@ -75,7 +75,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
         }}
       >
         {missingLSValues && (
-          <Typography variant="h6" sx={{ my: 2, textAlign: "center" }}>
+          <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
             Missing in LS ({missingLSValues.length})
           </Typography>
         )}
@@ -89,6 +89,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
               onClick={() => handleCopy(caseID)}
               key={caseID}
             />
+            <LinkComponent caseID={caseID} />
           </div>
         ))}
       </Box>
