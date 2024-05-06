@@ -4,7 +4,7 @@ export default function ExcelInput({excelText, setExcelText}) {
   return (
     <TextField
       id="outlined-basic"
-      label="Paste Excel"
+      label="Paste Case IDs"
       variant="outlined"
       margin="normal"
       required
