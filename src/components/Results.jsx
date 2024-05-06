@@ -4,6 +4,7 @@ import { Button, Chip, Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import LinkComponent from "./Link";
+import "animate.css";
 
 export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
   console.log(ExcelAndLSCaseIDs);
@@ -20,6 +21,24 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const openAllMissingExcelCases = () => {
+    missingExcelValues.forEach((caseID) => {
+      const url = `https://aaaj.legalserver.org/matter/switch/view/${caseID.substr(
+        -6
+      )}`;
+      chrome.tabs.create({ url: url, active: false });
+    });
+  };
+
+  const openAllMissingLSCases = () => {
+    missingLSValues.forEach((caseID) => {
+      const url = `https://aaaj.legalserver.org/matter/switch/view/${caseID.substr(
+        -6
+      )}`;
+      chrome.tabs.create({ url: url, active: false });
+    });
   };
 
   return (
@@ -47,9 +66,27 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
         }}
       >
         {missingExcelValues && (
-          <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
-            Missing in Excel ({missingExcelValues.length})
-          </Typography>
+          <>
+            <Typography
+              variant="h5"
+              sx={{ mt: 2, textAlign: "center", fontWeight: "bold" }}
+            >
+              Missing in Excel ({missingExcelValues.length})
+            </Typography>
+            {missingExcelValues.length !== 0 && (
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                title="Open all case links"
+                sx={{ mb: 1 }}
+                disableElevation
+                onClick={openAllMissingExcelCases}
+              >
+                Open all cases
+              </Button>
+            )}
+          </>
         )}
         {missingExcelValues?.map((caseID) => (
           <div
@@ -60,6 +97,7 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
               label={caseID}
               onClick={() => handleCopy(caseID)}
               key={caseID}
+              title="Copy Case ID"
             />
             <LinkComponent caseID={caseID} />
           </div>
@@ -75,9 +113,27 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
         }}
       >
         {missingLSValues && (
-          <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
-            Missing in LS ({missingLSValues.length})
-          </Typography>
+          <>
+            <Typography
+              variant="h5"
+              sx={{ mt: 2, textAlign: "center", fontWeight: "bold" }}
+            >
+              Missing in LS ({missingLSValues.length})
+            </Typography>
+            {missingLSValues.length !== 0 && (
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                title="Open all case links"
+                sx={{ mb: 1 }}
+                disableElevation
+                onClick={openAllMissingLSCases}
+              >
+                Open all cases
+              </Button>
+            )}
+          </>
         )}
         {missingLSValues?.map((caseID) => (
           <div
@@ -88,17 +144,23 @@ export default function Results({ ExcelAndLSCaseIDs, setShowResults }) {
               label={caseID}
               onClick={() => handleCopy(caseID)}
               key={caseID}
+              title="Copy Case ID"
             />
             <LinkComponent caseID={caseID} />
           </div>
         ))}
       </Box>
+      {missingExcelValues.length === 0 && missingLSValues.length === 0 && (
+        <Box className="animate__animated animate__heartBeat" sx={{my: 4}}>
+          <Typography variant="h4" sx={{fontWeight: "bold", color: "orange"}}>Perfect!</Typography>
+        </Box>
+      )}
       <Button
         variant="contained"
         size="medium"
         color="success"
         onClick={() => setShowResults(false)}
-        sx={{ mt: 3, mb: 3 }}
+        sx={{ mt: 4, mb: 1 }}
       >
         Done
       </Button>
