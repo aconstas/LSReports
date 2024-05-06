@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Form from "./components/Form";
 import Results from "./components/Results";
 import {
@@ -8,7 +8,6 @@ import {
   Container,
   Button,
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Drawer from "@mui/material/Drawer";
 import AddIcon from "@mui/icons-material/Add";
@@ -82,6 +81,7 @@ function App() {
                 <TextField
                   id="standard-basic"
                   label="Grant Name"
+                  helperText="Must exactly match LS"
                   variant="standard"
                   value={grantNameInput}
                   onChange={(event) => setGrantNameInput(event.target.value)}
@@ -107,11 +107,10 @@ function App() {
                       </IconButton>
                     </ListItem>
                   ))}
-                {/* {localStorageGrants} */}
               </List>
             </Stack>
           </Container>
-          <Button variant="contained" color="success" sx={{ display: 'block', margin: 'auto', mb: 2 }}>
+          <Button variant="contained" color="success" sx={{ display: 'block', margin: 'auto', mb: 2 }} onClick={toggleDrawer(false)}>
             Save
           </Button>
         </Drawer>
@@ -126,7 +125,7 @@ function App() {
           px: "1rem"
         }}
       >
-        <Typography variant="h5" sx={{ mb: 2, textAlign: "left" }}>
+        <Typography variant="h5" sx={{ mb: 2, textAlign: "left", fontWeight: "bold" }}>
           LSReports
         </Typography>
         {!showResults && (
